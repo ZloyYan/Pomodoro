@@ -2,13 +2,14 @@ from fastapi import Depends
 
 from cache.accessor import get_redis_connection
 from repository.cache_task import TaskCache
-from repository.task import TaskRepository
+from repository import TaskRepository, UserRepository
 from database import get_db_session
-from service.task import TaskService
+from service import TaskService, UserService
+from service import AuthService
 
 def get_tasks_repository() -> TaskRepository:
     db_session = get_db_session()
-    return TaskRepository(db_session)
+    return TaskRepository(db_session=db_session)
 
 def get_tasks_cache_repository() -> TaskCache:
     redis_connection = get_redis_connection()
@@ -21,3 +22,19 @@ def get_tasks_service(
     tasks_repository = get_tasks_repository()
     tasks_cache_repository = get_tasks_cache_repository()
     return TaskService(tasks_repository, tasks_cache_repository)
+
+def get_user_repository():
+    db_session = get_db_session()
+    return UserRepository(db_session=db_session)
+
+def get_user_service(
+    user_repository: UserRepository = Depends(get_user_repository)
+) -> UserService:
+    user_repository = get_user_repository()
+    return UserService(user_repository=user_repository)
+
+def get_auth_service(
+    user_repository: UserRepository = Depends(get_user_repository) 
+) -> AuthService:
+    user_repository = get_user_repository()
+    return AuthService(user_repository=user_repository)

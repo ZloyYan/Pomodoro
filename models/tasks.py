@@ -1,21 +1,6 @@
 from typing import Optional
-from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase, declared_attr
-
-
-
-class Base(DeclarativeBase):
-    id: any
-
-    __name__: str
-
-    __allow_unmapped__ = True # __allow_unmapped__ позволяет описывать поля,
-
-    @declared_attr
-    def __tablename__(self) -> str:
-        return self.__name__.lower() # имя таблицы в БД будет именем модели, приведенным к нижнему регистру
-
-
-
+from sqlalchemy.orm import Mapped, mapped_column
+from database import Base
 
 
 class Tasks(Base): # DeclarativeBase позволяет описывать модели SQLAlchemy с помощью ORM (Object-Relational Mapping) и автоматически генерирует SQLAlchemy схему БД

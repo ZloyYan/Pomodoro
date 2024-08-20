@@ -1,6 +1,6 @@
-from database.models import Tasks, Categories, Base
-from database.database import get_db_session
-__all__ = ['Tasks', 'Categories', 'get_db_session', 'Base'] # Эти имена будут доступны из этого модуля вне его контекста
+from database.database import Base
+from database.accessor import get_db_session
+__all__ = ['get_db_session', 'Base'] # Эти имена будут доступны из этого модуля вне его контекста
 
 
 # Файл __init__.py в папке Python является важным элементом, делающим эту папку пакетом Python. Помимо этой основной роли, __init__.py часто используется для выполнения нескольких дополнительных задач:
