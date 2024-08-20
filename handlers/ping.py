@@ -11,4 +11,3 @@ async def ping_app(self):
 @router.get('/db')
 async def ping_db(self):
     return {"message": "pong"}
-

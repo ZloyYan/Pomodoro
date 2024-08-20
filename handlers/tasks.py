@@ -1,14 +1,10 @@
 from fastapi import APIRouter, status, Depends
 from typing import Annotated
-from pydantic import BaseModel
-from fastapi.exceptions import HTTPException
 
-from repository.cache_task import TaskCache
-from schema.task import TaskSchema
-from repository.task import TaskRepository
+from schema import TaskSchema
+from repository import TaskRepository
 from dependency import get_tasks_service, get_tasks_repository
-from database.database import get_db_session
-from service.task import TaskService
+from service import TaskService
 
 
 router = APIRouter(prefix='/task', tags=['task'])  # group API endpoints under "task" tag

@@ -1,8 +1,10 @@
 from fastapi import HTTPException
 from sqlalchemy import select, delete, update
 from sqlalchemy.orm import Session
-from database import Tasks, Categories, get_db_session
-from schema.task import TaskSchema
+
+from models import Tasks, Categories
+from schema import TaskSchema
+
 
 class TaskRepository:
     def __init__(self, db_session: Session):

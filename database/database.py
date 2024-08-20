@@ -1,13 +1,15 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from typing import Any
+from sqlalchemy.orm import DeclarativeBase, declared_attr
 
-from settings import Settings
 
-settings = Settings()
+class Base(DeclarativeBase):
+    id: any
 
-# Connect to the SQLite database
-engine = create_engine(settings.db_url)
-Session = sessionmaker(engine) # sessionmaker является фабричным классом из библиотеки SQLAlchemy, который создает новые сессии для взаимодействия с базой данных. В данном контексте, Session является объектом, который создается с помощью sessionmaker.
+    __name__: str
 
-def get_db_session() -> Session: # Функция для получения сессии базы данных. -> Session - указывает, что возвращается объект сессии базы данных. Смысловой нагрузки не несёт, но говорит о том, что функция вернёт объект класса Session.
-    return Session()
+    __allow_unmapped__ = True # __allow_unmapped__ позволяет описывать поля,
+
+    @declared_attr
+    def __tablename__(self) -> str:
+        return self.__name__.lower() # имя таблицы в БД будет именем модели, приведенным к нижнему регистру
+
