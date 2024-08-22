@@ -1,4 +1,5 @@
 from typing import Optional
+from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 from database import Base
 
@@ -9,6 +10,7 @@ class Tasks(Base): # DeclarativeBase позволяет описывать мо�
     name: Mapped[str] # Mapped в данном случае обозначает, что поле будет соответствовать полю в БД с таким же именем
     pomodoro_count: Mapped[int]
     category_id: Mapped[int] = mapped_column(nullable=False) # nullable=False указывает, что поле должно быть обязательно заполнено
+    user_id: Mapped[int] = mapped_column(ForeignKey("UserProfile.id"), nullable=False) # nullable=False
 
 
 class Categories(Base): # Для описания таблицы Categories

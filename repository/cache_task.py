@@ -18,3 +18,12 @@ class TaskCache:
         tasks_json = [task.model_dump_json() for task in tasks] 
         with self.redis as redis:
             redis.lpush('tasks', *tasks_json)
+
+    def delete_task(self, task_id: int):
+        with self.redis as redis:
+            redis.lrem('tasks', 0, str(task_id))
+
+    def add_task(self, task: TaskSchema):
+        task_json = task.model_dump_json()
+        with self.redis as redis:
+            redis.lpush('tasks', task_json)
