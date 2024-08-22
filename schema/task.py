@@ -6,6 +6,7 @@ class TaskSchema(BaseModel):
     name: str
     pomodoro_count: int
     category_id: int
+    user_id: int
     # created_at: Optional[str] = None # = None значит, что поле не обязательно присутствует в модели
     # created_at: int = Field(alias="createdAt") # alias позволяет использовать другое имя поля в API ответах. Это значит, что в ответах будет "createdAt" вместо "created_at"
     # created_at: int = Field(exclude=True) # exclude=True позволяет исключить поле из ответ
@@ -19,3 +20,10 @@ class TaskSchema(BaseModel):
         if self.pomodoro_count is None and self.name is None:
             raise ValueError("Name and Pomodoro count must be provided")
         return self
+    
+
+
+class TaskCreateSchema(BaseModel):
+    name: str
+    pomodoro_count: int
+    category_id: int
