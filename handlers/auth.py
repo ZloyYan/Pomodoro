@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from typing import Annotated
+from fastapi.responses import RedirectResponse
 
 from schema import UserLoginSchema, UserCreateSchema
 from service import AuthService
@@ -30,3 +31,50 @@ async def login(
             detail=e.detail
         )
     
+
+@router.get(
+    "/login/google",
+    response_class=RedirectResponse
+)
+async def google_login(
+    auth_service: Annotated[AuthService, Depends(get_auth_service)]
+):
+    redirect_url =  auth_service.get_google_redirect_url()
+    print(redirect_url)  # Выводим ссылку для перенап
+    return RedirectResponse(url=redirect_url)
+
+
+# Хэндлер, который возвращает код авторизации через Google
+@router.get(
+    "/google"
+)
+async def google_auth(
+    code: str,
+    auth_service: Annotated[AuthService, Depends(get_auth_service)]
+):
+    return auth_service.google_auth(code=code)
+
+
+
+
+@router.get(
+    "/login/yandex",
+    response_class=RedirectResponse
+)
+async def yandex_login(
+    auth_service: Annotated[AuthService, Depends(get_auth_service)]
+):
+    redirect_url =  auth_service.get_yandex_redirect_url()
+    print(redirect_url)  # Выводим ссылку для перенап
+    return RedirectResponse(url=redirect_url)
+
+
+
+@router.get(
+    "/yandex",
+)
+async def yandex_auth(
+    code: str,
+    auth_service: Annotated[AuthService, Depends(get_auth_service)]
+):
+    return auth_service.yandex_auth(code=code)
