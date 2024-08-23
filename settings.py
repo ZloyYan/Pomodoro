@@ -22,7 +22,6 @@ class Settings(BaseSettings):
     YANDEX_TOKEN_URL: str = 'https://oauth.yandex.ru/token'
 
 
-
     @property
     def db_url(self):
         return f"{self.DB_DRIVER}://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"

@@ -13,3 +13,4 @@ class UserProfile(Base):
     yandex_access_token: Mapped[Optional[str]] 
     email: Mapped[Optional[str]] 
     name: Mapped[Optional[str]] 
+
