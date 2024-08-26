@@ -5,7 +5,7 @@ class Settings(BaseSettings):
     DB_PORT: int = 5432
     DB_USER: str = "postgres"
     DB_PASSWORD: str = "password"
-    DB_DRIVER: str = "postgresql+psycopg2"
+    DB_DRIVER: str = "postgresql+asyncpg"
     DB_NAME: str = "pomodoro"
     CACHE_HOST: str = "localhost"
     CACHE_PORT: int = 6379
