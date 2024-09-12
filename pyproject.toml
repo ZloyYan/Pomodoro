@@ -19,10 +19,20 @@ httpx = "^0.27.0"
 asyncpg = "^0.29.0"
 greenlet = "^3.0.3"
 python-dotenv = "^1.0.1"
-pytest = "^8.3.2"
+pytest = {extras = ["async"], version = "^8.3.2"}
+twisted = "^24.7.0"
+pytest-twisted = "^1.14.2"
+celery = "^5.4.0"
 
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+]
+
+python_paths = "/Users/yanik/Desktop/fastapi_pomodoro/app"

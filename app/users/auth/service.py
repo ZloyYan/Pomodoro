@@ -9,6 +9,7 @@ import datetime
 
 from app.users.auth.client import GoogleClient, YandexClient
 from app.exceptions import UserNotFoundException, UserNotCorrectPasswordException, TokenExpiredException, InvalidTokenException
+from app.users.auth.client.mail import MailClient
 from app.users.user_profile.models import UserProfile
 from app.users.auth.schema import UserLoginSchema
 from app.users.user_profile.repository import UserRepository
@@ -21,8 +22,8 @@ class AuthService:
     user_repository: UserRepository
     settings: Settings
     google_client: GoogleClient
-    yandex_client: YandexClient
-
+    yandex_client: YandexClient 
+    mail_client: MailClient
 
     async def google_auth(self, code: str):
         user_data = await self.google_client.get_user_info(code)
@@ -38,6 +39,7 @@ class AuthService:
         )
         created_user = await self.user_repository.create_user(create_user_data)
         access_token = self.generate_access_token(user_id=created_user.id)
+        self.mail_client.send_welcome_email(to=created_user.email)
         print("user_created")
         return UserLoginSchema(user_id=created_user.id, access_token=access_token)
     
@@ -55,6 +57,7 @@ class AuthService:
         )
         created_user = await self.user_repository.create_user(create_user_data)
         access_token = self.generate_access_token(user_id=created_user.id)
+        self.mail_client.send_welcome_email(to=created_user.email)
         print("user_created")
         return UserLoginSchema(user_id=created_user.id, access_token=access_token)
 
@@ -80,7 +83,7 @@ class AuthService:
             raise UserNotCorrectPasswordException
         
     def generate_access_token(self, user_id: int) -> str:
-        expires_date_unix = (dt.utcnow() + timedelta(days=7)).timestamp()
+        expires_date_unix = (dt.now(tz=datetime.timezone.utc) + timedelta(days=7)).timestamp()
         token = jwt.encode(
             {"user_id": user_id, 'expire': expires_date_unix},
             self.settings.JWT_SECRET_KEY,
@@ -93,7 +96,7 @@ class AuthService:
             payload = jwt.decode(access_token, self.settings.JWT_SECRET_KEY, algorithms=[self.settings.JWT_ENCODE_ALGORITHM])
         except JWTError:
             raise InvalidTokenException
-        if payload['expire'] < dt.utcnow().timestamp():
+        if payload['expire'] < dt.now(tz=datetime.timezone.utc).timestamp():
             raise TokenExpiredException
         
         return payload['user_id']

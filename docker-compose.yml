@@ -2,6 +2,7 @@
 version: '3.9'
 
 services:
+  web: 
 
   db:
     image: postgres:14
@@ -20,3 +21,15 @@ services:
     restart: always
     ports:
     - "6380:6379" 
+
+  worker: 
+    build: ./project
+    command: celery -A worker.celery worker -l info
+    volumes:
+      -./pomodoro:/code
+    environment:
+      - CELERY_BROKER_URL=redis://cache:6379/0
+      - CELERY_RESULT_BACKEND=redis://cache:6379/0
+    depends_on:
+      - db
+      - cache

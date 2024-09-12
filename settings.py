@@ -20,6 +20,11 @@ class Settings(BaseSettings):
     YANDEX_CLIENT_SECRET: str = ''
     YANDEX_REDIRECT_URI: str = ''
     YANDEX_TOKEN_URL: str = 'https://oauth.yandex.ru/token'
+    CELERY_REDIS_URL: str = 'redis://localhost:6379'
+    from_email: str = 'yan.tbc@gmail.com'
+    SMTP_PORT: int = 465 # Порт для защищенного SSL соединения, для незащищенного использовать 565 вроде
+    SMTP_HOST: str = "smtp.gmail.com"
+    SMTP_PASSWORD: str = "your_password"
 
 
     @property
